@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <title>Comentarios</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.6/semantic.min.css">
+    <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.6/semantic.min.js"></script>
+
+    {% block more_static %}
+    {% endblock %}
+  </head>
+
+  <body  style="background-color:#f5f5dc;">
+      <div class="ui segment container" style="margin-top:20px;margin-bottom:5px;min-height:80%;" id="main_container">
+       {% block content %}
+          <h1 class="ui centered header"> Comentarios </h1>
+          <h3> Bienvenido, escriba un comentario: </h3>
+          <form class="ui large form" method="POST" action="{% url 'post_comment' %}">
+              {% csrf_token %}
+              {% for field in form %}
+                <div class="{% if field.errors %} error {% endif %} field">
+                {{ field.label_tag }}
+                <div class="ui grid">
+                  <div class="sixteen wide column" style="padding-right:3px;">
+                    {{ field }}
+                  </div>
+                </div>
+                {% if field.errors %}
+                  <div class="ui red pointing label">
+                    {{ field.errors.0 }}
+                  </div>
+                {% endif %}
+                </div>
+              {% endfor %}
+
+            <div class="ui grid">
+              <div class="sixteen wide column">
+                <div style ="text-align: center;">
+                  <button class="ui primary button" type="submit">Comentar</button>
+                </div>
+              </div>
+            </div>
+
+          </form>
+          <div class="ui segment container" style="padding: 30px;margin-top:20px;margin-bottom:5px;" id="comment_container">
+              <div class="ui middle aligned divided list">
+              {% for comment in comments %}
+                  <div class="item">
+                    <i class="rss icon"></i>
+                    <div class="content">
+                      <p> <b>{{ comment.ip_address }}</b> : {{ comment.text }}</p>
+                    </div>
+                    <div class="right floated content">
+                      <div>{{ comment.created_at }}</div>
+                    </div>
+                  </div>
+              {% endfor %}
+            </div>
+          </div>
+       {% endblock %}
+    </div>
+  </body>
+
+ </html>
